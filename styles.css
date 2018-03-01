@@ -20,7 +20,7 @@ h1 {
 
 #seating {
 	overflow: hidden;
-	width: 730px;
+	width: 850px;
 	margin: auto;
 	padding-left: 10px;
 }
@@ -33,11 +33,16 @@ h1 {
 	float: left;
 	margin-right: 10px;
 	margin-bottom: 10px;
-	width: 30px;
-	line-height: 26px;
-	border: 2px solid #ccc;
+	width: 37px;
+	height: 37px;
+	line-height: 32px;
 	text-align: center;
-	font-size: 12px;
+	font-size: 10px;
+}
+
+.a {
+	background: url(svg/chair-a.svg) no-repeat;
+	color: #EDEDED;
 }
 
 .a:hover, .s:hover {
@@ -45,28 +50,31 @@ h1 {
 }
 
 .a:hover {
-	background: #F9E300;
+	background: url(svg/chair-h.svg) no-repeat;
+	color:#000;
 }
 
 .s {
-	background: #F62BC8;
+	background: url(svg/chair-s.svg) no-repeat;
 }
 
 .r {
-	background: #FF0000;
+	background: url(svg/chair-r.svg) no-repeat;
+	color: #000;
 }
 
 #seating .label {
-	border: 2px solid #fff;
 	text-transform: uppercase;
+	font-size: 12px;
+	line-height: 37px;
 }
 
 #left, #right {
-	width: 160px;
+	width: 188px;
 }
 
 #middle {
-	width: 360px;
+	width: 423px;
 	margin: 0 20px;
 }
 
