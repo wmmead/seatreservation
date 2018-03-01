@@ -321,6 +321,10 @@ This might have to be modified a bit if you were getting real data from a server
 
 			//After reserving seats, set the array back to empty, so more can be reserved.
 			selectedSeats = [];
+			
+			//Have to run this after, incase the user clicks reserve again without
+			//selecting more seats...
+			manageConfirmForm();
 
 			//You can see the resulting object in the console...
 			var test = JSON.parse(JSON.stringify(reservedSeats));
