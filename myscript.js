@@ -59,9 +59,6 @@ function makeRows(sectionLength, rowLength, placement){
 			}
 			counter = counter + (rowLength - sectionLength);
 		}
-		//Add the HTML to the page...
-		document.getElementById(placement).innerHTML = html;
-		
 	}
 	
 	
@@ -80,10 +77,6 @@ function makeRows(sectionLength, rowLength, placement){
 			//On the right side we put the label last
 			html += '<div class="label">' + rows[i] + '</div>';
 		}
-		
-		//Add the HTML to the page
-		document.getElementById(placement).innerHTML = html;
-		
 	}
 	
 	if(placement === "middle"){
@@ -101,11 +94,9 @@ function makeRows(sectionLength, rowLength, placement){
 			counter = counter + ((rowLength - sectionLength)/2);
 			
 		}
-		//Add the html to the page...
-		document.getElementById(placement).innerHTML = html;
-		
 	}
-	
+	//Add the HTML to the page...
+	document.getElementById(placement).innerHTML = html;
 }
 
 //Calling the function three times for the three sections on the page.
@@ -184,7 +175,10 @@ This might have to be modified a bit if you were getting real data from a server
 	});
 	
 	//Event Listener for clicking the confirm button in the reservation form to process the reservation
-	document.getElementById('confirmbtn').addEventListener('click', processReservation());
+	document.getElementById('confirmres').addEventListener('submit', function(event){
+		processReservation();
+		event.preventDefault();
+	} );
 	
 	
 	function myClickHandler(eachSeat){
@@ -289,54 +283,42 @@ This might have to be modified a bit if you were getting real data from a server
 	***************/
 	
 	function processReservation(){
+		
+		var hardCodeRecords = Object.keys(reservedSeats).length;
+		var counter = 1;			 
+		var fname = document.getElementById('fname').value;
+		var lname = document.getElementById('lname').value;
+		var nextRecord = '';
 
-		// handle form submission...
-		document.getElementById('confirmres').addEventListener('submit', function(event){
-
-			//get the number of records from the current object...
-			var hardCodeRecords = Object.keys(reservedSeats).length;
-			var counter = 1;			 
-			var fname = document.getElementById('fname').value;
-			var lname = document.getElementById('lname').value;
-			var nextRecord = '';
-
-			for( var i=0; i<selectedSeats.length; i++){
-
-				//Change the display on the page...
-				document.getElementById(selectedSeats[i]).className = "r";
-				document.getElementById(selectedSeats[i]).innerHTML = "R";
-
-				//Add the next record to the object, incrementing the record number...
-				nextRecord = "record" + (hardCodeRecords + counter);
-				reservedSeats[nextRecord] = {
-					seat:selectedSeats[i],
-					owner:{
-						fname:fname,
-						lname:lname
-					}
-				};
-
-				counter++;
-			}
-
-			//After reserving seats, set the array back to empty, so more can be reserved.
-			selectedSeats = [];
+		for( var i=0; i<selectedSeats.length; i++){
 			
-			//Have to run this after, incase the user clicks reserve again without
-			//selecting more seats...
-			manageConfirmForm();
+			//Change the display on the page...
+			document.getElementById(selectedSeats[i]).className = "r";
+			document.getElementById(selectedSeats[i]).innerHTML = "R";
+			
+			//Add the next record to the object, incrementing the record number...
+			nextRecord = "record" + (hardCodeRecords + counter);
+			reservedSeats[nextRecord] = {
+				seat:selectedSeats[i],
+				owner:{
+					fname:fname,
+					lname:lname
+				}
+			};
 
-			//You can see the resulting object in the console...
-			var test = JSON.parse(JSON.stringify(reservedSeats));
-			console.log(test);
+			counter++;
+		}
+		
+		//After reserving seats, set the array back to empty, so more can be reserved.
+		selectedSeats = [];
+		manageConfirmForm();
 
-			//Keep the form from actually submitting...
-			event.preventDefault();
+		//You can see the resulting object in the console...
+		console.log(reservedSeats);
 
-			//Close the damn form when done...
-			document.getElementById('resform').style.display="none";
-
-		});
+		//Close the damn form when done...
+		document.getElementById('resform').style.display="none";
+		
 	} // end processReservation
 	
 }()); // end closure
