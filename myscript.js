@@ -46,53 +46,26 @@ function makeRows(sectionLength, rowLength, placement){
 	var counter = 1;
 	var i, j = 0;
 	
-	if(placement === "left"){
+	for( i=0; i<rows.length; i++ ){
 		
-		for( i=0; i<rows.length; i++ ){
-			//On the left side, we put the lable first
-			html += '<div class="label">' + rows[i] + '</div>';
-			
-			for( j=0; j<sectionLength; j++ ){
-				//Build the html...
-				html += '<div class="a" id="'+rows[i]+counter+'">' + counter + '</div>';
-				counter++;
-			}
-			counter = counter + (rowLength - sectionLength);
+		//add the correct counter or lable for left or right or center
+		switch(placement) {
+			case "left": html += '<div class="label">' + rows[i] + '</div>'; break;
+			case "right": counter = counter + (rowLength - sectionLength); break;
+			default: counter = counter + ((rowLength - sectionLength)/2);
 		}
-	}
-	
-	
-	if(placement === "right"){
 		
-		for( i=0; i<rows.length; i++ ){
-			
-			counter = counter + (rowLength - sectionLength);
-			
-			for( j=0; j<sectionLength; j++ ){
-				
-				//Build the html...
-				html += '<div class="a" id="'+rows[i]+counter+'">' + counter + '</div>';
-				counter++;
-			}
-			//On the right side we put the label last
-			html += '<div class="label">' + rows[i] + '</div>';
+		for( j=0; j<sectionLength; j++ ){
+			//Build the html...
+			html += '<div class="a" id="'+rows[i]+counter+'">' + counter + '</div>';
+			counter++;
 		}
-	}
-	
-	if(placement === "middle"){
 		
-		for( i=0; i<rows.length; i++ ){
-			
-			counter = counter + ((rowLength - sectionLength)/2);
-			
-			for( j=0; j<sectionLength; j++ ){
-				//Build the html...
-				html += '<div class="a" id="'+rows[i]+counter+'">' + counter + '</div>';
-				counter++;
-			}
-			
-			counter = counter + ((rowLength - sectionLength)/2);
-			
+		//add the correct counter or lable for left or right or center
+		switch(placement) {
+			case "right": html += '<div class="label">' + rows[i] + '</div>'; break;
+			case "left": counter = counter + (rowLength - sectionLength); break;
+			default: counter = counter + ((rowLength - sectionLength)/2);
 		}
 	}
 	//Add the HTML to the page...
