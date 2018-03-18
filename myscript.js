@@ -99,16 +99,9 @@ This might have to be modified a bit if you were getting real data from a server
 
 		var obj = reservedSeats[key];
 		
-		for (var prop in obj) {
-			// skip loop if the property is from prototype
-			if(!obj.hasOwnProperty(prop)) { continue; }
-			
-			// Add the class that makes the seats red and puts an "R" in them...
-			if(prop === "seat"){
-				document.getElementById(obj[prop]).className = "r";
-				document.getElementById(obj[prop]).innerHTML = "R";
-			}
-		}
+		document.getElementById(obj.seat).className = "r";
+		document.getElementById(obj.seat).innerHTML = "R";
+		
 	}
 }());  //end closure
 
