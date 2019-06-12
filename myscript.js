@@ -1,6 +1,8 @@
+//Updated to use es6 as of 6/12/2019
+
 // Example data for already reserved seats...
 // This is not json data, but a JS object...
-var reservedSeats = {
+const reservedSeats = {
 	record1:{
 		seat:"b19",
 		owner:{
@@ -39,31 +41,31 @@ Each section is generated separately, but the rows keep their numbers in order.
 More could be done to generalize this function, but it works as-is for this layout.
 ***************/
 
-function makeRows(sectionLength, rowLength, placement){
+const makeRows = (sectionLength, rowLength, placement) => {
 	"use strict";
-	var rows = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t"];
-	var html = "";
-	var counter = 1;
-	var i, j = 0;
+	const rows = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t"];
+	let html = "";
+	let counter = 1;
+	let i, j = 0;
 	
 	for( i=0; i<rows.length; i++ ){
 		
 		//add the correct counter or lable for left or right or center
 		switch(placement) {
-			case "left": html += '<div class="label">' + rows[i] + '</div>'; break;
+			case "left": html += `<div class="label">${rows[i]}</div>`; break;
 			case "right": counter = counter + (rowLength - sectionLength); break;
 			default: counter = counter + ((rowLength - sectionLength)/2);
 		}
 		
 		for( j=0; j<sectionLength; j++ ){
 			//Build the html...
-			html += '<div class="a" id="'+rows[i]+counter+'">' + counter + '</div>';
+			html += `<div class="a" id="${rows[i]+counter}">${counter}</div>`;
 			counter++;
 		}
 		
 		//add the correct counter or lable for left or right or center
 		switch(placement) {
-			case "right": html += '<div class="label">' + rows[i] + '</div>'; break;
+			case "right": html += `<div class="label">${rows[i]}</div>`; break;
 			case "left": counter = counter + (rowLength - sectionLength); break;
 			default: counter = counter + ((rowLength - sectionLength)/2);
 		}
@@ -87,7 +89,7 @@ This might have to be modified a bit if you were getting real data from a server
 
 (function(){
 	"use strict";
-	for (var key in reservedSeats) {
+	for (let key in reservedSeats) {
 		
 		/*************
 		skip loop if the property is from prototype
@@ -113,47 +115,9 @@ This might have to be modified a bit if you were getting real data from a server
 	"use strict";
 	
 	// This array holds seats during the selection process, before they are reserved.
-	var selectedSeats = [];
+	let selectedSeats = [];
 	
-	var seats = document.getElementsByClassName('a');
-	
-	//Adds an event listener to each seat in the house...
-	for(var i=0; i<seats.length; i++){
-		seats[i].addEventListener('click', myClickHandler(i) );
-	}
-	
-	// Run this here incase someone immediately presses the reserve seats button
-	manageConfirmForm();
-	
-	//Event listener for the reserve button to open the form...
-	document.getElementById('reserve').addEventListener('click', function(event){
-		//show the form
-		document.getElementById('resform').style.display="block";
-		event.preventDefault();
-		
-	});
-	
-	//Event listener to close the form if someone clicks cancel...
-	document.getElementById('cancel').addEventListener('click', function(event){
-		//hide the form
-		document.getElementById('resform').style.display="none";
-		event.preventDefault();
-	});
-	
-	//Event Listener for clicking the confirm button in the reservation form to process the reservation
-	document.getElementById('confirmres').addEventListener('submit', function(event){
-		processReservation();
-		event.preventDefault();
-	} );
-	
-	
-	function myClickHandler(eachSeat){
-		var seats = document.getElementsByClassName('a');
-		var thisSeat = seats[eachSeat].id;
-		return function(){
-			seatSelectionProcess(thisSeat);
-		};
-	}
+	const seats = document.getElementsByClassName('a');
 
 	/**************
 	The seatSelectionProcess function below adds selected seats to the array at the 
@@ -161,10 +125,10 @@ This might have to be modified a bit if you were getting real data from a server
 	It also adds the correct classes for the display of available and unavailble seats.
 	***************/
 
-	function seatSelectionProcess(seat){
+	const seatSelectionProcess = seat => {
 		
 		//passed in id for a seat such as b24
-		var thisSeat = seat;
+		let thisSeat = seat;
 		
 		/**************
 		I can't seem to get the remove event listener to work, but this works instead.
@@ -176,7 +140,7 @@ This might have to be modified a bit if you were getting real data from a server
 			// If seat is already in the array, take it out when clicked again
 			if(selectedSeats.indexOf(thisSeat) > -1 ){
 
-				var index = selectedSeats.indexOf(thisSeat);
+				let index = selectedSeats.indexOf(thisSeat);
 
 				selectedSeats.splice(index, 1);
 				document.getElementById(thisSeat).className = "a";
@@ -207,7 +171,7 @@ This might have to be modified a bit if you were getting real data from a server
 	the form inside the dialog box is hidden and an error message shown.
 	***************/
 
-	function manageConfirmForm(){
+	const manageConfirmForm = () =>{
 
 		if(selectedSeats.length > 0){
 
@@ -215,18 +179,18 @@ This might have to be modified a bit if you were getting real data from a server
 
 				// If only one seat was selected to be reserved...
 				if(selectedSeats.length === 1){
-					document.getElementById("selectedseats").innerHTML="You have selected seat " + selectedSeats[0];
+					document.getElementById("selectedseats").innerHTML=`You have selected seat ${selectedSeats[0]}`;
 				}
 				// If more than one seat was selected to be reserved.
 				else{
 					//puts the array into a string, but there are no spaces after the commas...
-					var seatsString = selectedSeats.toString();
+					let seatsString = selectedSeats.toString();
 					//adds spaces after the commas
 					seatsString = seatsString.replace(/,/g, ", ");
 					//for the last comma, removes it and put in an 'and' instead....
 					seatsString = seatsString.replace(/,(?=[^,]*$)/, ' and');
 
-					document.getElementById("selectedseats").innerHTML="You have selected seats " + seatsString;
+					document.getElementById("selectedseats").innerHTML=`You have selected seats ${seatsString}`;
 				}
 			}
 
@@ -237,7 +201,7 @@ This might have to be modified a bit if you were getting real data from a server
 			document.getElementById("selectedseats").innerHTML= 'You need to select some seats to reserve.<br><a href="#" id="error">Close</a> this dialog box and pick at least one seat.';
 
 			//Click handler to close the dialog box...
-			document.getElementById('error').addEventListener('click', function(){
+			document.getElementById('error').addEventListener('click', () => {
 				document.getElementById('resform').style.display="none";
 			}); 
 		}
@@ -248,15 +212,15 @@ This might have to be modified a bit if you were getting real data from a server
 	and changes the display on the page.
 	***************/
 	
-	function processReservation(){
+	const processReservation = () => {
 		
-		var hardCodeRecords = Object.keys(reservedSeats).length;
-		var counter = 1;			 
-		var fname = document.getElementById('fname').value;
-		var lname = document.getElementById('lname').value;
-		var nextRecord = '';
+		const hardCodeRecords = Object.keys(reservedSeats).length;
+		let counter = 1;			 
+		let fname = document.getElementById('fname').value;
+		let lname = document.getElementById('lname').value;
+		let nextRecord = '';
 
-		for( var i=0; i<selectedSeats.length; i++){
+		for( let i=0; i<selectedSeats.length; i++){
 			
 			//Change the display on the page...
 			document.getElementById(selectedSeats[i]).className = "r";
@@ -286,5 +250,41 @@ This might have to be modified a bit if you were getting real data from a server
 		document.getElementById('resform').style.display="none";
 		
 	} // end processReservation
+
+	
+	// Run this here incase someone immediately presses the reserve seats button
+	manageConfirmForm();
+	
+	const myClickHandler = eachSeat => {
+		const seats = document.getElementsByClassName('a');
+		let thisSeat = seats[eachSeat].id;
+		return () => seatSelectionProcess(thisSeat);
+	}
+	
+	//Adds an event listener to each seat in the house...
+	for(let i=0; i<seats.length; i++){
+		seats[i].addEventListener('click', myClickHandler(i) );
+	}
+	
+	//Event listener for the reserve button to open the form...
+	document.getElementById('reserve').addEventListener('click', event => {
+		//show the form
+		document.getElementById('resform').style.display="block";
+		event.preventDefault();
+		
+	});
+	
+	//Event listener to close the form if someone clicks cancel...
+	document.getElementById('cancel').addEventListener('click', event => {
+		//hide the form
+		document.getElementById('resform').style.display="none";
+		event.preventDefault();
+	});
+	
+	//Event Listener for clicking the confirm button in the reservation form to process the reservation
+	document.getElementById('confirmres').addEventListener('submit', event => {
+		processReservation();
+		event.preventDefault();
+	} );
 	
 }()); // end closure
